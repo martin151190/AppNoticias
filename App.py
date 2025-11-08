@@ -4,6 +4,9 @@ import requests
 from Funcion_Infobae import extraer_noticias_infobae_scraping
 from Funcion_Clarin import extraer_noticias_clarin
 from Funcion_LN import extraer_noticias_lanacion
+from Funcion_P12 import extraer_noticias_pagina12
+from Funcion_google import extraer_noticias_googlenews
+
 
 # ---------------- CONFIGURACIÓN GENERAL ----------------
 st.set_page_config(page_title="🗞️ Noticias Argentinas", layout="wide")
@@ -111,10 +114,12 @@ if st.button("🔄 Recargar noticias"):
 @st.cache_data(ttl=3600)
 def obtener_todas():
     # Asegúrate de que estas funciones devuelvan un DataFrame válido, incluso vacío.
+    df_ldd = extraer_noticias_googlenews()  # Llamada de prueba para depuración()
     df_infobae = extraer_noticias_infobae_scraping()
     df_clarin = extraer_noticias_clarin()
     df_ln = extraer_noticias_lanacion()
-    return pd.concat([df_infobae, df_clarin, df_ln], ignore_index=True)
+    df_p12 = extraer_noticias_pagina12()
+    return pd.concat([df_infobae, df_clarin, df_ln, df_p12, df_ldd], ignore_index=True)
 
 df = obtener_todas()
 
